@@ -2,36 +2,37 @@ package tools
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 )
 
-var (
-	//请求中传入了key
-	numKeys      = 0
+type DataGenerateRule struct {
+	MaxKeyNum   int
+	MaxStrLen   int
+	MaxValLen   int
+	MaxIntVal   int
+	MaxFloatVal int
+	MaxMulti    int
+	Silent      bool
+}
 
-	//数据量配置
-	maxStrLen    = 40
-	maxIntVal    = 100
-	maxFloatVal  = 100
-	maxMultiTime = 20     //批量个数
-
-	//记录start end情况下start的值
-	first        = true
-	firstInt     = -1
-	firstChar    = 0
-	firstFloat   = -0.1
-)
-
-func getData(name string) string {
-	var result string
+func getData(r *Rand, dgr *DataGenerateRule, prefix, name string) string {
+	var (
+		result string
+		//记录start end情况下start的值
+		first      = true
+		firstInt   = -1
+		firstChar  = 0
+		firstFloat = -0.1
+	)
 
 	switch name {
 	case "int":
-		result = strconv.Itoa(RandInt(maxIntVal))
+		result = strconv.Itoa(r.RandInt(dgr.MaxIntVal))
 	case "ilimit":
-		iVal := RandInt(maxIntVal)
-		tmp  := RandInt(2)
-		if tmp % 2 == 0 {
+		iVal := r.RandInt(dgr.MaxIntVal)
+		tmp := r.RandInt(2)
+		if tmp%2 == 0 {
 			iVal = -iVal
 		}
 		if first {
@@ -45,9 +46,9 @@ func getData(name string) string {
 		}
 		result = strconv.Itoa(iVal)
 	case "float":
-		result = strconv.FormatFloat(RandFloat(maxFloatVal), 'f', -1, 64)
+		result = strconv.FormatFloat(r.RandFloat(dgr.MaxFloatVal), 'f', -1, 64)
 	case "flimit":
-		fVal := RandFloat(maxFloatVal)
+		fVal := r.RandFloat(dgr.MaxFloatVal)
 		if first {
 			firstFloat = fVal
 		} else {
@@ -55,7 +56,7 @@ func getData(name string) string {
 				fVal += firstFloat
 			}
 		}
-		switch RandInt(3) {
+		switch r.RandInt(3) {
 		case 1:
 			result = strconv.FormatFloat(fVal, 'f', -1, 64)
 		case 2:
@@ -70,15 +71,17 @@ func getData(name string) string {
 			}
 		}
 
-		if first { //用于区分-inf和+info
+		if first { //用于区分-inf和+inf
 			first = false
 		} else {
 			first = true
 		}
 	case "string":
-		result = RandString(maxStrLen)
+		result = r.RandRangeKey(prefix, dgr.MaxKeyNum)
+	case "string_v":
+		result = r.RandString(dgr.MaxValLen)
 	case "slimit":
-		iVal := RandInt(25)
+		iVal := r.RandInt(25)
 		if first {
 			if iVal == 25 {
 				iVal--
@@ -89,8 +92,8 @@ func getData(name string) string {
 				iVal = firstChar + 1
 			}
 		}
-		sVal := string('a' + iVal) + RandString(maxStrLen)
-		switch RandInt(3) {
+		sVal := string('a'+iVal) + r.RandString(dgr.MaxStrLen)
+		switch r.RandInt(3) {
 		case 1:
 			result = "(" + sVal
 		case 2:
@@ -109,8 +112,8 @@ func getData(name string) string {
 			first = true
 		}
 	case "position":
-		tmp := RandInt(2)
-		if tmp % 2 == 0 {
+		tmp := r.RandInt(2)
+		if tmp%2 == 0 {
 			result = "BEFORE"
 		} else {
 			result = "AFTER"
@@ -121,12 +124,12 @@ func getData(name string) string {
 			"\x00c`\x17\x009\xe0\x06\x00\x02\x15\x01d@\x17\x004 #\xe0\x03\x00\x0b2" +
 			"\x15\x01e\x03\x030.5\x05\x01f@\x1f\x005\xe0\x066\x018\xff\x06\x006F_\xbe\xd0\xec*\x0b"
 	case "match":
-		length := RandInt(maxStrLen)
+		length := r.RandInt(dgr.MaxStrLen)
 		for length > 0 {
 			length--
-			switch RandInt(3) {
+			switch r.RandInt(3) {
 			case 1:
-				result += string('a' + RandInt(26) - 1)
+				result += string('a' + r.RandInt(26) - 1)
 			case 2:
 				result += "?"
 			case 3:
@@ -134,7 +137,7 @@ func getData(name string) string {
 			}
 		}
 	case "aggrgate":
-		switch RandInt(3) {
+		switch r.RandInt(3) {
 		case 1:
 			result = "SUM"
 		case 2:
@@ -143,22 +146,23 @@ func getData(name string) string {
 			result = "MAX"
 		}
 	case "sortModle":
-		switch RandInt(2) {
+		switch r.RandInt(2) {
 		case 1:
 			result = "ASC"
 		case 2:
 			result = "DESC"
 		}
 	default:
-		fmt.Println("+++", name)
 		result = name
 	}
 
-	return " " + result
+	return result
 }
 
-func BuildData(conf interface{}) string {
-	var result string
+func BuildData(r *Rand, dgr *DataGenerateRule, prefix, conf interface{}, numKeys *int) []string {
+	var (
+		result []string
+	)
 
 	switch confType := conf.(type) {
 	case []interface{}:
@@ -166,36 +170,33 @@ func BuildData(conf interface{}) string {
 		for ind, param := range paramList {
 			switch param.(type) {
 			case []interface{}:
-				tmp := RandInt(2)
-				if tmp % 2 == 1 {
-					result += BuildData(param)
+				tmp := r.RandInt(2)
+				if tmp%2 == 1 {
+					result = append(result, BuildData(r, dgr, prefix, param, numKeys)...)
 				}
 			default:
 				if param.(string) == "numkeys" {
-					numKeys = RandInt(maxMultiTime)
-					result += strconv.Itoa(numKeys)
+					*numKeys = r.RandInt(dgr.MaxMulti) + 2
+					result = append(result, strconv.Itoa(*numKeys))
 				} else if param.(string) == "etc" {
 					loop := 0
-					if numKeys != 0 {
-						loop = numKeys //保证key的个数与后续传入相同
+					if *numKeys != 0 {
+						loop = *numKeys - 2 //保证key的个数与后续传入相同
 					} else {
-						loop = RandInt(maxMultiTime)
+						loop = r.RandInt(dgr.MaxMulti)
 					}
 					for loop > 0 {
-						result += BuildData(paramList[:ind])
+						result = append(result, BuildData(r, dgr, prefix, paramList[:ind], numKeys)...)
 						loop--
 					}
 				} else {
-					result += getData(param.(string))
+					result = append(result, getData(r, dgr, prefix.(string), param.(string)))
 				}
 			}
 		}
 	default:
 		fmt.Println("Unknown build data conf type:", confType)
-	}
-
-	if numKeys != 0 {
-		numKeys = 0
+		os.Exit(1)
 	}
 
 	return result

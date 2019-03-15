@@ -42,6 +42,6 @@ Usage of ./build-redis-data:
 
 # Authors
 
-- (tjuqxy)[https://github.com/tjuqxy] Initial and most work
-- (yongman)[https://github.com/yongman] Arguments configurable,redis integration,parellel support.
+- [tjuqxy](https://github.com/tjuqxy) Initial and most work
+- [yongman](https://github.com/yongman) Arguments configurable,redis integration,parellel support.
 

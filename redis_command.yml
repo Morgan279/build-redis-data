@@ -9,11 +9,22 @@ read-command:
             - string
         type:             #TYPE key
             - string
+        dump:             #DUMP key
+            - string
+        touch:
+            - string
+            - - string
+              - etc
     string:
         bitcount:         #BITCOUNT key [start end]
             - string
             - - ilimit
               - ilimit
+        bitfield:
+            - string
+            - GET
+            - u4
+            - "0"
         get:              #GET key
             - string
         getbit:           #GETBIT key offset
@@ -29,6 +40,10 @@ read-command:
               - etc
         strlen:           #STRLEN key
             - string
+        bitpos:
+            - string
+            - "1"
+            - "0"
     list:
         lindex:           #LINDEX key index
             - string
@@ -66,6 +81,19 @@ read-command:
             - string
         smembers:         #SMEMBERS key
             - string
+        sunion:           #SUNION key [key ...]
+            - string
+            - - string
+              - etc
+        sdiff:            #SDIFF key [key ...]
+            - string
+            - - string
+              - etc
+        sinter:           #SINTER key [key ...]
+            - string
+            - - string
+              - etc
+
     hash:
         hexists:          #HEXISTS key field
             - string
@@ -158,6 +186,28 @@ read-command:
             - string
             - - string
               - etc
+    geo:
+        geodist:
+            - string
+            - string
+            - string
+        geohash:
+            - string
+            - string
+        geopos:
+            - string
+            - string
+        georadius:
+            - string
+            - "30"
+            - "20"
+            - "200"
+            - "km"
+        georadiusbymember:
+            - string
+            - string
+            - "100"
+            - "km"
 
 #写命令
 write-command:
@@ -180,6 +230,16 @@ write-command:
             - int
         persist:          #PERSIST key
             - string
+        rename:
+            - string
+            - string
+        renamenx:
+            - string
+            - string
+        restore:          #RESTORE key ttl serialized-value
+            - string
+            - int
+            - serialized
 
     string:
         append:           #APPEND key value
@@ -190,8 +250,6 @@ write-command:
         decrby:           #DECRBY key decrement
             - string
             - int
-        dump:             #DUMP key
-            - string
         getset:           #GETSET key value
             - string
             - string_v
@@ -209,14 +267,16 @@ write-command:
             - - string
               - string_v
               - etc
+        msetnx:           #MSETNX key value [key value ...]
+            - string
+            - string_v
+            - - string
+              - string_v
+              - etc
         psetex:           #PSETEX key milliseconds value
             - string
             - int
             - string_v
-        restore:          #RESTORE key ttl serialized-value
-            - string
-            - int
-            - serialized
         set:              #SET key value
             - string
             - string_v
@@ -235,6 +295,12 @@ write-command:
             - string
             - "0"
             - string_v
+        bitop:
+            - AND
+            - string
+            - string
+            - - string
+              - etc
     list:
         linsert:          #LINSERT key BEFORE|AFTER pivot value
             - string
@@ -298,10 +364,6 @@ write-command:
             - string
         srem:             #SREM key member [member ...]
             - string
-            - string
-            - - string
-              - etc
-        sunion:           #SUNION key [key ...]
             - string
             - - string
               - etc
@@ -401,3 +463,9 @@ write-command:
             - string
             - - string
               - etc
+    geo:
+        geoadd:
+            - string
+            - "30"
+            - "20"
+            - string

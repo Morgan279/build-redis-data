@@ -24,6 +24,7 @@ var (
 	maxFloatVal = flag.Int("float", 10000000, "max float value in redis commands")
 	maxMulti    = flag.Int("multi", 20, "max multiple times in redis commands, such as mget/mset")
 	silent      = flag.Bool("silent", false, "run in silent mode")
+	password    = flag.String("passwd", "", "redis auth password")
 )
 
 func main() {
@@ -56,7 +57,7 @@ func main() {
 		os.Exit(0)
 	}()
 
-	pool := tools.NewPool(fmt.Sprintf("%s:%d", *ip, *port))
+	pool := tools.NewPool(fmt.Sprintf("%s:%d", *ip, *port), *password)
 
 	c := conf.DealConf(*confFile)
 	for i := 0; i < *parallel; i++ {

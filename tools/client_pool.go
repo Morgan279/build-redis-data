@@ -6,7 +6,7 @@ import (
 	"github.com/garyburd/redigo/redis"
 )
 
-func NewPool(server string) *redis.Pool {
+func NewPool(server, password string) *redis.Pool {
 	return &redis.Pool{
 		MaxIdle:     3,
 		IdleTimeout: 10 * time.Second,
@@ -14,6 +14,12 @@ func NewPool(server string) *redis.Pool {
 			c, err := redis.Dial("tcp", server)
 			if err != nil {
 				return nil, err
+			}
+			if password != "" {
+				if _, err = c.Do("AUTH", password); err != nil {
+					c.Close()
+					return nil, err
+				}
 			}
 			return c, err
 		},

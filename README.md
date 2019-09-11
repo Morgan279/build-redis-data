@@ -24,6 +24,8 @@ Usage of ./build-redis-data:
     	max int value in redis commands (default 10000000)
   -key int
     	max key range number (default 100000000)
+  -latency
+        show latency of each command
   -multi int
     	max multiple times in redis commands, such as mget/mset (default 20)
   -port int

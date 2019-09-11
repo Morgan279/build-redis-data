@@ -14,6 +14,7 @@ type DataGenerateRule struct {
 	MaxFloatVal int
 	MaxMulti    int
 	Silent      bool
+	Latency     bool
 }
 
 func getData(r *Rand, dgr *DataGenerateRule, prefix, name string) string {

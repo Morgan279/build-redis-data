@@ -193,25 +193,11 @@ write-command:
             - int
         persist:          #PERSIST key
             - string
-        sort:             #SORT key [BY pattern] [LIMIT offset count] [GET pattern [GET pattern ...]] [ASC|DESC] [ALPHA] [STORE destination]
-            - string
-            - - BY
-              - match
-            - - LIMIT
-              - int
-              - int
-            - - GET
-              - string
-              - etc
-            - - sortModle
-            - - ALPHA
-            - - STORE
-              - string
 
     string:
         append:           #APPEND key value
             - string
-            - string
+            - string_v
         decr:             #DECR key
             - string
         decrby:           #DECRBY key decrement
@@ -221,7 +207,7 @@ write-command:
             - string
         getset:           #GETSET key value
             - string
-            - string
+            - string_v
         incr:             #INCR key
             - string
         incrby:           #INCRBY key increment
@@ -232,48 +218,48 @@ write-command:
             - float
         mset:             #MSET key value [key value ...]
             - string
-            - string
+            - string_v
             - - string
-              - string
+              - string_v
               - etc
         psetex:           #PSETEX key milliseconds value
             - string
             - int
-            - string
+            - string_v
         restore:          #RESTORE key ttl serialized-value
             - string
             - int
             - serialized
         set:              #SET key value
             - string
-            - string
+            - string_v
         setbit:           #SETBIT key offset value
             - string
-            - int
-            - string
+            - "0"
+            - string_v
         setex:            #SETEX key seconds value
             - string
             - int
-            - string
+            - string_v
         setnx:            #SETNX key value
             - string
-            - string
+            - string_v
         setrange:         #SETRANGE key offset value
             - string
-            - int
-            - string
+            - "0"
+            - string_v
     list:
         linsert:          #LINSERT key BEFORE|AFTER pivot value
             - string
             - position
             - string
-            - string
+            - string_v
         lpop:             #LPOP key
             - string
         lpush:            #LPUSH key value [value ...]
             - string
-            - string
-            - - string
+            - string_v
+            - - string_v
               - etc
         lpushx:           #LPUSHX key value
             - string
@@ -281,11 +267,11 @@ write-command:
         lrem:             #LREM key count value
             - string
             - int
-            - string
+            - string_v
         lset:             #LSET key index value
             - string
             - int
-            - string
+            - string_v
         ltrim:            #LTRIM key start stop
             - string
             - ilimit
@@ -297,12 +283,12 @@ write-command:
             - string
         rpush:            #RPUSH key value [value ...]
             - string
-            - string
-            - - string
+            - string_v
+            - - string_v
               - etc
         rpushx:           #RPUSHX key value
             - string
-            - string
+            - string_v
     set:
         sadd:             #SADD key member [member ...]
             - string

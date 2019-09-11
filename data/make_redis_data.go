@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/garyburd/redigo/redis"
 	"github.com/yongman/build-redis-data/tools"
@@ -41,7 +42,12 @@ func MakeRedisData(c map[string]interface{}, redis redis.Conn, dgr *tools.DataGe
 			if !dgr.Silent {
 				fmt.Println(cmd, paramStr)
 			}
+			startTs := time.Now()
 			_, err := redis.Do(cmd.(string), inner(paramStr)...)
+			elapsed := time.Now().Sub(startTs)
+			if dgr.Latency {
+				fmt.Printf("cost: %d ms cmd: %v\n", int64(elapsed)/1000, cmd)
+			}
 			if err != nil {
 				if !dgr.Silent {
 					fmt.Println(err.Error())
@@ -66,7 +72,12 @@ func MakeRedisData(c map[string]interface{}, redis redis.Conn, dgr *tools.DataGe
 			if !dgr.Silent {
 				fmt.Println(cmd, paramStr)
 			}
+			startTs := time.Now()
 			_, err := redis.Do(cmd.(string), inner(paramStr)...)
+			elapsed := time.Now().Sub(startTs)
+			if dgr.Latency {
+				fmt.Printf("cost: %d ms cmd: %v\n", int64(elapsed)/1000, cmd)
+			}
 			if err != nil {
 				if !dgr.Silent {
 					fmt.Println(err.Error())

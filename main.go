@@ -25,6 +25,7 @@ var (
 	maxMulti    = flag.Int("multi", 20, "max multiple times in redis commands, such as mget/mset")
 	silent      = flag.Bool("silent", false, "run in silent mode")
 	password    = flag.String("passwd", "", "redis auth password")
+	latency     = flag.Bool("latency", false, "show latency of each command")
 )
 
 func main() {
@@ -38,6 +39,7 @@ func main() {
 		MaxFloatVal: *maxFloatVal,
 		MaxMulti:    *maxMulti,
 		Silent:      *silent,
+		Latency:     *latency,
 	}
 
 	var wg sync.WaitGroup

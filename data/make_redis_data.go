@@ -46,7 +46,7 @@ func MakeRedisData(c map[string]interface{}, redis redis.Conn, dgr *tools.DataGe
 			_, err := redis.Do(cmd.(string), inner(paramStr)...)
 			elapsed := time.Now().Sub(startTs)
 			if dgr.Latency {
-				fmt.Printf("cost: %d ms cmd: %v\n", int64(elapsed)/1000, cmd)
+				fmt.Printf("cost: %d us cmd: %v\n", int64(elapsed)/1000, cmd)
 			}
 			if err != nil {
 				if !dgr.Silent {
@@ -76,7 +76,7 @@ func MakeRedisData(c map[string]interface{}, redis redis.Conn, dgr *tools.DataGe
 			_, err := redis.Do(cmd.(string), inner(paramStr)...)
 			elapsed := time.Now().Sub(startTs)
 			if dgr.Latency {
-				fmt.Printf("cost: %d ms cmd: %v\n", int64(elapsed)/1000, cmd)
+				fmt.Printf("cost: %d us cmd: %v\n", int64(elapsed)/1000, cmd)
 			}
 			if err != nil {
 				if !dgr.Silent {

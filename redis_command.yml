@@ -1,471 +1,220 @@
 #读命令
 read-command:
-    key:
-        exists:           #EXISTS key [key ...] twemproxy不支持多个key
-            - string
-        ttl:              #TTL key
-            - string
-        pttl:             #PTTL key
-            - string
-        type:             #TYPE key
-            - string
-        dump:             #DUMP key
-            - string
-        touch:
-            - string
-            - - string
-              - etc
-    string:
-        bitcount:         #BITCOUNT key [start end]
-            - string
-            - - ilimit
-              - ilimit
-        bitfield:
-            - string
-            - GET
-            - u4
-            - "0"
-        get:              #GET key
-            - string
-        getbit:           #GETBIT key offset
-            - string
-            - int
-        getrange:         #GETRANGE key start end
-            - string
-            - ilimit
-            - ilimit
-        mget:             #MGET key [key ...]
-            - string
-            - - string
-              - etc
-        strlen:           #STRLEN key
-            - string
-        bitpos:
-            - string
-            - "1"
-            - "0"
-    list:
-        lindex:           #LINDEX key index
-            - string
-            - int
-        llen:             #LLEN key
-            - string
-        lrange:           #LRANGE key start stop
-            - string
-            - ilimit
-            - ilimit
+  key:
+    exists: #EXISTS key [key ...] twemproxy不支持多个key
+      - string
+    ttl: #TTL key
+      - string
+    pttl: #PTTL key
+      - string
 
-    set:
-        srandmember:      #SRANDMEMBER key [count]
-            - string
-            - - int
-        sscan:            #SSCAN key cursor [MATCH pattern] [COUNT count]
-            - string
-            - int
-            - - MATCH
-              - match
-            - - COUNT
-              - int
-        sdiff:            #SDIFF key [key ...]
-            - string
-            - - string
-              - etc
-        sinter:           #SINTER key [key ...]
-            - string
-            - - string
-              - etc
-        scard:            #SCARD key
-            - string
-        sismember:        #SISMEMBER key message
-            - string
-            - string
-        smembers:         #SMEMBERS key
-            - string
-        sunion:           #SUNION key [key ...]
-            - string
-            - - string
-              - etc
-        sdiff:            #SDIFF key [key ...]
-            - string
-            - - string
-              - etc
-        sinter:           #SINTER key [key ...]
-            - string
-            - - string
-              - etc
+  string:
+    get: #GET key
+      - string
+    mget: #MGET key [key ...]
+      - string
+      - - string
+        - etc
+  list:
+    lindex: #LINDEX key index
+      - string
+      - int
+    llen: #LLEN key
+      - string
+    lrange: #LRANGE key start stop
+      - string
+      - ilimit
+      - ilimit
 
-    hash:
-        hexists:          #HEXISTS key field
-            - string
-            - string
-        hget:             #HGET key field
-            - string
-            - string
-        hgetall:          #HGETALL key
-            - string
-        hkeys:            #HEKYS key
-            - string
-        hlen:             #HLEN key
-            - string
-        hmget:            #HMGET key field [field ...]
-            - string
-            - - string
-              - etc
-        hscan:            #HSCAN key cursor [MATCH pattern] [COUNT count]
-            - string
-            - int
-            - - MATCH
-              - match
-            - - COUNT
-              - int
-        hvals:            #HVALS key
-            - string
-    zset:
-        zcard:            #ZCARD key
-            - string
-        zcount:           #ZCOUNT key min max
-            - string
-            - flimit
-            - flimit
-        zlexcount:        #ZLEXCOUNT key min max
-            - string
-            - slimit
-            - slimit
-        zrange:           #ZRANGE key start stop [WITHSCORES]
-            - string
-            - ilimit
-            - ilimit
-            - - WITHSCORES
-        zrangebylex:      #ZRANGEBYLEX key min max [LIMIT offset count]
-            - string
-            - slimit
-            - slimit
-            - - LIMIT
-              - ilimit
-              - ilimit
-        zrangebyscore:    #ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]
-            - string
-            - flimit
-            - flimit
-            - - WITHSCORES
-            - - LIMIT
-              - ilimit
-              - ilimit
-        zrank:            #ZRANK key member
-            - string
-            - string
-        zrevrange:         #ZREVRANGE key start stop [WITHSCORES]
-            - string
-            - int
-            - int
-            - - WITHSCORES
-        zrevrangebyscore: #ZREVRANGEBYSCORE key max min [WITHSCORES] [LIMIT offset count]
-            - string
-            - flimit
-            - flimit
-            - - WITHSCORES
-            - - LIMIT
-              - int
-              - int
-        zrevrank:         #ZREVRANK key member
-            - string
-            - string
-        zscore:           #ZSCORE key member
-            - string
-            - string
-        zscan:            #ZSCAN key cursor [MATCH pattern] [COUNT count]
-            - string
-            - int
-            - - MATCH
-              - match
-            - - COUNT
-              - int
-    pf:
-        pfmerge:          #PFMERGE destkey sourcekey [sourcekey ...]
-            - string
-            - string
-            - - string
-              - etc
-    geo:
-        geodist:
-            - string
-            - string
-            - string
-        geohash:
-            - string
-            - string
-        geopos:
-            - string
-            - string
-        georadius:
-            - string
-            - "30"
-            - "20"
-            - "200"
-            - "km"
-        georadiusbymember:
-            - string
-            - string
-            - "100"
-            - "km"
+  set:
+    scard: #SCARD key
+      - string
+    sismember: #SISMEMBER key message
+      - string
+      - string
+    smismember: #HMGET key field [field ...]
+      - string
+      - string
+      - - string
+        - etc
+    smembers: #SMEMBERS key
+      - string
+
+  hash:
+    hexists: #HEXISTS key field
+      - string
+      - string
+    hget: #HGET key field
+      - string
+      - string
+    hgetall: #HGETALL key
+      - string
+    hkeys: #HEKYS key
+      - string
+    hlen: #HLEN key
+      - string
+    hstrlen:
+      - string
+      - string
+    hmget: #HMGET key field [field ...]
+      - string
+      - string
+      - - string
+        - etc
+    hvals: #HVALS key
+      - string
+  zset:
+    zcard: #ZCARD key
+      - string
+    zcount: #ZCOUNT key min max
+      - string
+      - ilimit
+      - ilimit
+    zrange: #ZRANGE key start stop [WITHSCORES]
+      - string
+      - ilimit
+      - ilimit
+      - - WITHSCORES
+    zrangebyscore: #ZRANGEBYSCORE key min max [WITHSCORES]
+      - string
+      - ilimit
+      - ilimit
+      - - WITHSCORES
+    zrank: #ZRANK key member
+      - string
+      - string
+    zrevrange: #ZREVRANGE key start stop [WITHSCORES]
+      - string
+      - int
+      - int
+      - - WITHSCORES
+    zrevrangebyscore: #ZREVRANGEBYSCORE key max min [WITHSCORES] [LIMIT offset count]
+      - string
+      - ilimit
+      - ilimit
+      - - WITHSCORES
+      - - LIMIT
+        - int
+        - int
+    zscore: #ZSCORE key member
+      - string
+      - string
 
 #写命令
 write-command:
-    key:
-        del:              #DEL key [key ...]
-            - string
-            - - string
-              - etc
-        expire:           #EXPIRE key seconds
-            - string
-            - int
-        expireat:         #EXPIREAT key timestamp
-            - string
-            - int
-        pexpire:          #PEXPIRE key milliseconds
-            - string
-            - int
-        pexpireat:        #PEXPIREAT key timestamp
-            - string
-            - int
-        persist:          #PERSIST key
-            - string
-        rename:
-            - string
-            - string
-        renamenx:
-            - string
-            - string
-        restore:          #RESTORE key ttl serialized-value
-            - string
-            - int
-            - serialized
+  key:
+    del: #DEL key [key ...]
+      - string
+      - - string
+        - etc
+    expire: #EXPIRE key seconds
+      - string
+      - int
+    expireat: #EXPIREAT key timestamp
+      - string
+      - int
+    pexpire: #PEXPIRE key milliseconds
+      - string
+      - int
+    pexpireat: #PEXPIREAT key timestamp
+      - string
+      - int
 
-    string:
-        append:           #APPEND key value
-            - string
-            - string_v
-        decr:             #DECR key
-            - string
-        decrby:           #DECRBY key decrement
-            - string
-            - int
-        getset:           #GETSET key value
-            - string
-            - string_v
-        incr:             #INCR key
-            - string
-        incrby:           #INCRBY key increment
-            - string
-            - int
-        incrbyfloat:      #INCRBYFLOAT key increment
-            - string
-            - float
-        mset:             #MSET key value [key value ...]
-            - string
-            - string_v
-            - - string
-              - string_v
-              - etc
-        msetnx:           #MSETNX key value [key value ...]
-            - string
-            - string_v
-            - - string
-              - string_v
-              - etc
-        psetex:           #PSETEX key milliseconds value
-            - string
-            - int
-            - string_v
-        set:              #SET key value
-            - string
-            - string_v
-        setbit:           #SETBIT key offset value
-            - string
-            - "0"
-            - string_v
-        setex:            #SETEX key seconds value
-            - string
-            - int
-            - string_v
-        setnx:            #SETNX key value
-            - string
-            - string_v
-        setrange:         #SETRANGE key offset value
-            - string
-            - "0"
-            - string_v
-        bitop:
-            - AND
-            - string
-            - string
-            - - string
-              - etc
-    list:
-        linsert:          #LINSERT key BEFORE|AFTER pivot value
-            - string
-            - position
-            - string
-            - string_v
-        lpop:             #LPOP key
-            - string
-        lpush:            #LPUSH key value [value ...]
-            - string
-            - string_v
-            - - string_v
-              - etc
-        lpushx:           #LPUSHX key value
-            - string
-            - string
-        lrem:             #LREM key count value
-            - string
-            - int
-            - string_v
-        lset:             #LSET key index value
-            - string
-            - int
-            - string_v
-        ltrim:            #LTRIM key start stop
-            - string
-            - ilimit
-            - ilimit
-        rpop:             #RPOP key
-            - string
-        rpoplpush:        #RPOPLPUSH source destination
-            - string
-            - string
-        rpush:            #RPUSH key value [value ...]
-            - string
-            - string_v
-            - - string_v
-              - etc
-        rpushx:           #RPUSHX key value
-            - string
-            - string_v
-    set:
-        sadd:             #SADD key member [member ...]
-            - string
-            - string
-        sdiffstore:       #SDIFFSTORE destination key [key ...]
-            - string
-            - string
-            - - string
-              - etc
-        sinterstore:      #SINTERSTORE destination key [key ...]
-            - string
-            - string
-            - - string
-              - etc
-        smove:            #SMOVE source destination member
-            - string
-            - string
-            - string
-        spop:             #SPOP key
-            - string
-        srem:             #SREM key member [member ...]
-            - string
-            - string
-            - - string
-              - etc
-        sunionstore:      #SUNIONSTORE destination key [key ...]
-            - string
-            - string
-            - - string
-    hash:
-        hdel:             #HDEL key field [field ...]
-            - string
-            - string
-            - - string
-              - etc
-        hincrby:          #HINCRBY key field increment
-            - string
-            - string
-            - int
-        hincrbyfloat:     #HINCRBYFLOAT key field increment
-            - string
-            - string
-            - float
-        hmset:            #HMSET key field value [field value ...]
-            - string
-            - string
-            - string
-            - - string
-              - string
-              - etc
-        hset:             #HSET key field value
-            - string
-            - string
-            - string
-        hsetnx:           #HSETNX key field value
-            - string
-            - string
-            - string
-    zset:
-        zadd:             #ZADD key score member [score member ...]
-            - string
-            - float
-            - string
-            - - float
-              - string
-              - etc
-        zincrby:          #ZINCRBY key increment member
-            - string
-            - int
-            - string
-        zinterstore:      #ZINTERSTORE destination numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX]
-            - string
-            - numkeys
-            - string
-            - - string
-              - etc
-            - - WEIGHTS
-              - float
-              - - float
-                - etc
-            - - AGGREGATE
-              - aggregate
-        zunionstore:      #ZUNIONSTORE destination numkeys key [key ...] [WEIGHTS weight [weight ...]] [AGGREGATE SUM|MIN|MAX]
-            - string
-            - numkeys
-            - string
-            - - string
-              - etc
-            - - WEIGHTS
-              - float
-              - - float
-                - etc
-            - - AGGREGATE
-              - aggregate
-        zrem:             #ZREM key member [member ...]
-            - string
-            - string
-            - - string
-              - etc
-        zremrangebyrank:  #ZREMRANGEBYRANK key start stop
-            - string
-            - ilimit
-            - ilimit
-        zremrangebylex:   #ZREMRANGEBYLEX key min max
-            - string
-            - slimit
-            - slimit
-        zremrangebyscore: #ZREMRANGEBYSCORE key min max
-            - string
-            - flimit
-            - flimit
-    pf:
-        pfadd:            #PFADD key element [element ...]
-            - string
-            - string
-            - - string
-              - etc
-        pfcount:          #PFCOUNT key [key ...]
-            - string
-            - - string
-              - etc
-    geo:
-        geoadd:
-            - string
-            - "30"
-            - "20"
-            - string
+  string:
+    decr: #DECR key
+      - string
+    incr: #INCR key
+      - string
+    mset: #MSET key value [key value ...]
+      - string
+      - string_v
+      - - string
+        - string_v
+        - etc
+    set: #SET key value
+      - string
+      - string_v
+    setex: #SETEX key seconds value
+      - string
+      - int
+      - string_v
+    setnx: #SETNX key value
+      - string
+      - string_v
+
+  list:
+    lpop: #LPOP key
+      - string
+    lpush: #LPUSH key value [value ...]
+      - string
+      - string_v
+      - - string_v
+        - etc
+    lset: #LSET key index value
+      - string
+      - int
+      - string_v
+    ltrim: #LTRIM key start stop
+      - string
+      - ilimit
+      - ilimit
+    rpop: #RPOP key
+      - string
+    rpush: #RPUSH key value [value ...]
+      - string
+      - string_v
+      - - string_v
+        - etc
+  set:
+    sadd: #SADD key member [member ...]
+      - string
+      - string
+    spop: #SPOP key
+      - string
+    srem: #SREM key member [member ...]
+      - string
+      - string
+      - - string
+        - etc
+  hash:
+    hdel: #HDEL key field [field ...]
+      - string
+      - string
+      - - string
+        - etc
+    hincrby: #HINCRBY key field increment
+      - string
+      - string
+      - int
+    hmset: #HMSET key field value [field value ...]
+      - string
+      - string
+      - string
+      - - string
+        - string
+        - etc
+    hset: #HSET key field value
+      - string
+      - string
+      - string
+
+  zset:
+    zadd: #ZADD key score member [score member ...]
+      - string
+      - int
+      - string
+      - - int
+        - string
+        - etc
+    zrem: #ZREM key member [member ...]
+      - string
+      - string
+      - - string
+        - etc
+    zremrangebyscore: #ZREMRANGEBYSCORE key min max
+      - string
+      - ilimit
+      - ilimit
+    zpopmin:
+      - string
+      - - int
